@@ -1,0 +1,5 @@
+.state/
+bundle_build/
+*.zip
+__pycache__/
+*.pyc
