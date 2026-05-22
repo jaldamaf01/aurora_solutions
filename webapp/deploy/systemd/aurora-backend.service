@@ -1,0 +1,22 @@
+# webapp/deploy/systemd/aurora-backend.service
+[Unit]
+Description=Aurora FastAPI Backend (Clickstream Collector)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+
+EnvironmentFile=/etc/aurora/aurora.env
+WorkingDirectory=/opt/aurora/backend
+ExecStart=/opt/aurora/run_backend.sh
+Restart=always
+RestartSec=3
+
+# Seguridad básica
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

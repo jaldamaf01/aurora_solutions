@@ -17,6 +17,9 @@ Servicios desplegados:
 
 - `aurora_solution/deploy_aws.py`: despliegue idempotente de infraestructura y artefactos.
 - `aurora_solution/remote/bootstrap.sh`: provisionado automatizado de cada EC2 por rol.
+- `aurora_solution/webapp`: copia local autocontenida de la aplicacion web usada en el bundle.
+- `aurora_solution/generators`: copia local autocontenida de los generadores de datos de negocio.
+- `aurora_solution/simulators`: copia local autocontenida de los simuladores de trafico y replay.
 - `aurora_solution/spark/job1_curate.py`: curacion raw -> curated.
 - `aurora_solution/spark/job2_analytics.py`: analitica curated -> analytics + RDS.
 - `aurora_solution/docs/CRISPDM_*.md`: documentacion por fases.
@@ -29,7 +32,7 @@ El despliegue se lanza desde la raiz del repo con credenciales temporales AWS en
 python aurora_solution/deploy_aws.py --student-id juana --region us-east-1
 ```
 
-El script empaqueta la web/generadores/simuladores, sube el bundle a S3, crea los recursos AWS y arranca las EC2 con `user-data`. No requiere instalacion manual maquina por maquina.
+El script empaqueta la web/generadores/simuladores, sube el bundle a S3, crea los recursos AWS y arranca las EC2 con user-data. No requiere instalacion manual maquina por maquina.
 
 ## Salidas esperadas
 

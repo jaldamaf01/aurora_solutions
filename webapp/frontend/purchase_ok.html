@@ -1,0 +1,67 @@
+<!-- webapp/frontend/purchase_ok.html -->
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Compra realizada - Aurora Tickets</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>¡Compra realizada!</h1>
+      <nav>
+        <a href="">Home</a>
+        <a href="events.html">Volver a eventos</a>
+        <a href="checkout.html">Checkout</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Confirmación</h2>
+        <p>
+          Tu compra se ha registrado como <b>evento clickstream</b> (simulado).
+        </p>
+        <p class="muted">
+          Revisa en CloudWatch si el evento <code>purchase</code> aparece en tu
+          Log Group.
+        </p>
+
+        <button id="btn-again" class="btn" data-track="start_over">
+          Empezar otra sesión de navegación
+        </button>
+      </section>
+
+      <section class="card">
+        <h3>Sugerencia</h3>
+        <p>
+          Prueba a repetir el proceso entrando desde una campaña:
+          <code>/events.html?utm_campaign=summer_push</code>
+        </p>
+        <p>
+          <a href="events.html?utm_campaign=summer_push">Ir con utm_campaign</a>
+        </p>
+      </section>
+    </main>
+
+    <script type="module">
+      import "/js/tracker.js";
+      import { track, getSessionId } from "/js/tracker.js";
+
+      // Evento extra para marcar que el usuario llega a la confirmación
+      track("purchase_confirm_view", {
+        action: "purchase_ok",
+        session_id: getSessionId(),
+      });
+
+      // Botón para generar algo más de clickstream
+      document
+        .getElementById("btn-again")
+        .addEventListener("click", async () => {
+          await track("start_over", { action: "restart_flow" });
+          window.location.href = "/events.html";
+        });
+    </script>
+  </body>
+</html>

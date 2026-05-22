@@ -68,6 +68,18 @@ def random_password():
     return f"Aurora{token}26!"
 
 
+def resolve_bundle_source(solution_dir, repo_root, name):
+    candidates = [
+        solution_dir / name,
+        repo_root / "Tema 4" / name,
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    checked = ", ".join(str(path) for path in candidates)
+    raise FileNotFoundError(f"Missing bundle source for {name}. Checked: {checked}")
+
+
 def build_bundle(repo_root, solution_dir):
     build_dir = solution_dir / "bundle_build"
     if build_dir.exists():
@@ -76,9 +88,18 @@ def build_bundle(repo_root, solution_dir):
 
     bundle_root = build_dir / "aurora_bundle"
     bundle_root.mkdir()
-    shutil.copytree(repo_root / "Tema 4" / "webapp", bundle_root / "webapp")
-    shutil.copytree(repo_root / "Tema 4" / "generators", bundle_root / "generators")
-    shutil.copytree(repo_root / "Tema 4" / "simulators", bundle_root / "simulators")
+    shutil.copytree(
+        resolve_bundle_source(solution_dir, repo_root, "webapp"),
+        bundle_root / "webapp",
+    )
+    shutil.copytree(
+        resolve_bundle_source(solution_dir, repo_root, "generators"),
+        bundle_root / "generators",
+    )
+    shutil.copytree(
+        resolve_bundle_source(solution_dir, repo_root, "simulators"),
+        bundle_root / "simulators",
+    )
     shutil.copytree(solution_dir / "spark", bundle_root / "spark")
 
     docs = bundle_root / "docs"

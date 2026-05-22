@@ -1,0 +1,43 @@
+<!-- webapp/frontend/checkout.html -->
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Checkout - Aurora Tickets</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Checkout</h1>
+      <nav>
+        <a href="">Home</a>
+        <a href="events.html">Eventos</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div id="checkout"></div>
+
+      <section class="card">
+        <h3>Recordatorio</h3>
+        <p>
+          La compra es simulada. Al pulsar <b>Confirmar compra</b> se enviará un
+          evento <code>purchase</code> al backend mediante
+          <code>POST /track</code>.
+        </p>
+        <p class="muted">
+          (Más adelante, en el pipeline, cruzarás estas compras con
+          <code>transactions.csv</code> por <code>session_id</code> +
+          <code>event_id</code>.)
+        </p>
+      </section>
+    </main>
+
+    <script type="module">
+      import "./js/tracker.js";
+      import { renderCheckout } from "./js/app.js";
+      renderCheckout("checkout");
+    </script>
+  </body>
+</html>

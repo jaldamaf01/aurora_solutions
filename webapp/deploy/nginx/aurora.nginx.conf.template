@@ -1,0 +1,66 @@
+# webapp/deploy/nginx/aurora.nginx.conf.template
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    # Front estático
+    root /var/www/aurora/frontend;
+    index index.html;
+
+    # Logs Nginx (útiles para depurar)
+    access_log /var/log/nginx/aurora_access.log;
+    error_log  /var/log/nginx/aurora_error.log warn;
+
+    # Seguridad mínima (sin complicar)
+    add_header X-Content-Type-Options nosniff always;
+
+    # --- PROXY A FASTAPI ---
+    # Track endpoint (client-side)
+    location = /track {
+        proxy_pass http://127.0.0.1:8000/track;
+
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Para POST con JSON
+        proxy_read_timeout 30s;
+        proxy_connect_timeout 5s;
+    }
+
+    # Health endpoint (para comprobación)
+    location = /health {
+        proxy_pass http://127.0.0.1:8000/health;
+
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # --- SERVIR FRONT ---
+    # Archivos estáticos típicos (mejor cache)
+    location ~* \.(css|js|png|jpg|jpeg|gif|svg|ico)$ {
+        try_files $uri =404;
+        expires 1h;
+        add_header Cache-Control "public, max-age=3600";
+    }
+
+    # Datos (events.json)
+    location /data/ {
+        try_files $uri =404;
+        expires 5m;
+        add_header Cache-Control "public, max-age=300";
+    }
+
+    # HTML: sin cache agresiva (para ver cambios)
+    location / {
+        try_files $uri $uri/ =404;
+        add_header Cache-Control "no-store";
+    }
+}

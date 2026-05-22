@@ -1,0 +1,47 @@
+<!-- webapp/frontend/index.html -->
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Aurora Tickets</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Aurora Tickets</h1>
+      <nav>
+        <a href="events.html" data-track="nav_events">Eventos</a>
+        <a href="checkout.html" data-track="nav_checkout">Checkout</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Bienvenido/a</h2>
+        <p>
+          Explora eventos y simula una compra. Tu navegación genera clickstream
+          (client-side) que se enviará al backend.
+        </p>
+        <a class="btn" href="events.html" data-track="cta_go_events"
+          >Ver eventos</a
+        >
+      </section>
+
+      <section class="card">
+        <h3>Tip</h3>
+        <p>
+          Prueba a entrar con <code>?utm_campaign=spring_sale</code> en la URL
+          para generar atribución de campaña.
+        </p>
+        <p>
+          <a href="events.html?utm_campaign=spring_sale" data-track="try_utm"
+            >Abrir con utm_campaign</a
+          >
+        </p>
+      </section>
+    </main>
+
+    <script type="module" src="js/tracker.js"></script>
+  </body>
+</html>
